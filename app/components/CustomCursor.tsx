@@ -8,11 +8,9 @@ export default function CustomCursor() {
     const cursorY = useMotionValue(-100);
 
     // Smooth physics for the trailing cursor
-    const springConfig = { damping: 25, stiffness: 300 };
+    const springConfig = { damping: 20, stiffness: 150 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
-
-    const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
         const moveCursor = (e: MouseEvent) => {
@@ -20,43 +18,21 @@ export default function CustomCursor() {
             cursorY.set(e.clientY - 16);
         };
 
-        const handleMouseEnter = () => setIsHovering(true);
-        const handleMouseLeave = () => setIsHovering(false);
-
-        // Attach listeners to interactive elements
-        // We use event delegation or periodic scaling for simplicity with broad selectors
-        const addHoverListeners = () => {
-            const targets = document.querySelectorAll('a, button, input, .cursor-pointer');
-            targets.forEach(el => {
-                el.addEventListener('mouseenter', handleMouseEnter);
-                el.addEventListener('mouseleave', handleMouseLeave);
-            });
-        };
-
         window.addEventListener('mousemove', moveCursor);
-        addHoverListeners();
-
-        // Re-attach listeners on DOM changes (simple mutation observer alternative for Single Page Apps)
-        const observer = new MutationObserver(addHoverListeners);
-        observer.observe(document.body, { childList: true, subtree: true });
 
         return () => {
             window.removeEventListener('mousemove', moveCursor);
-            observer.disconnect();
         };
     }, []);
 
     return (
         <>
             <motion.div
-                className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center backdrop-blur-xs"
+                className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none mix-blend-difference flex items-center justify-center backdrop-blur-xs"
                 style={{
                     x: cursorXSpring,
                     y: cursorYSpring,
-                }}
-                animate={{
-                    scale: isHovering ? 2.5 : 1,
-                    backgroundColor: isHovering ? "rgba(255, 255, 255, 0.1)" : "transparent"
+                    zIndex: 9999
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
