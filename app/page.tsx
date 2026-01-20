@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import TheEthos from "./components/TheEthos";
 import TheConstruct from "./components/TheConstruct";
 import TheSyndicate from "./components/TheSyndicate";
+import TheArchive from "./components/TheArchive";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <FashionLandingStrip />
       <TheEthos />
       <TheConstruct />
+      <TheArchive />
       <TheSyndicate />
       <Footer />
     </main>
